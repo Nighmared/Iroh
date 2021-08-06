@@ -2,6 +2,7 @@ import datetime
 import discord
 from discord.ext import commands
 
+
 class General(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -14,10 +15,12 @@ class General(commands.Cog):
     async def info(self, ctx: commands.Context):
         embed = discord.Embed(
             title="Info about Iroh",
-            description="very much WIP"
+            description="very much WIP",
+            url="https://github.com/Nighmared/Iroh",
+
         )
         embed.add_field(name="Author", value="<@!291291715598286848>")
-        embed.add_field(name="Source", value="naw, not yet")
+        embed.add_field(name="Source", value="https://github.com/Nighmared/Iroh")
         embed.set_author(
             name=ctx.author.name,
             icon_url=ctx.author.avatar_url,
