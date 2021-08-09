@@ -9,6 +9,7 @@ class General(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         DiscordComponents(self.bot)
+        self.bot.load_extension("cogs.quotes")
 
     @commands.command()
     async def say(self, ctx: Context, *words):

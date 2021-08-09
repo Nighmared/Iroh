@@ -21,7 +21,7 @@ async def reload(ctx):
 
 @bot.event
 async def on_command(ctx: commands.Context):
-    logging.INFO(f"{ctx.author.id} aka {ctx.author.name}: {ctx.command}")
+    logging.info(f"{ctx.author.id} aka {ctx.author.name}: {ctx.command}")
     await ctx.message.delete()
 
 
