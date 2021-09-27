@@ -11,17 +11,9 @@ bot = Bot(command_prefix="Iroh ")
 bot.load_extension("cogs.general")
 
 
-@bot.command(aliases=["rl", ])
-@commands.is_owner()
-async def reload(ctx):
-    bot.unload_extension("cogs.general")
-    bot.load_extension("cogs.general")
-    await ctx.send("Reloaded!")
-
-
 @bot.event
 async def on_command(ctx: commands.Context):
-    logging.info(f"{ctx.author.id} aka {ctx.author.name}: {ctx.command}")
+    logging.info(f"{ctx.channel.name}>{ctx.author.id} aka {ctx.author.name}: {ctx.command}")
     await ctx.message.delete()
 
 

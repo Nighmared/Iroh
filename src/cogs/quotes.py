@@ -4,6 +4,7 @@ from discord.ext.commands import Context
 from random import choice
 import json
 
+
 class Quotes(commands.Cog):
     def __init__(self):
         with open("../data/iroh_quotes.json",'r') as f:

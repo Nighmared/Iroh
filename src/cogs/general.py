@@ -4,13 +4,62 @@ from discord.ext import commands
 from discord.ext.commands import Context
 from discord_components import DiscordComponents, Button
 
+
 class General(commands.Cog):
+
+    EXTENSIONS = (
+        "cogs.quotes",
+    )
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         DiscordComponents(self.bot)
-        self.bot.load_extension("cogs.quotes")
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        await self.load_extensions()
+
+    async def load_extensions(self):
+        for ext in self.EXTENSIONS:
+            try:
+                self.bot.load_extension(ext)
+            except discord.ext.commands.errors.ExtensionAlreadyLoaded:
+                continue
+
+    async def reload_cog(self, cog:str):
+        self.bot.reload_extension(f"cogs.{cog.lower()}")
+        return True
+        print(str(e))
+        return False
+
+    @commands.command(aliases=['rl', ])
+    @commands.is_owner()
+    async def reload(self, ctx: Context, cog: str = None):
+        """
+        reload a specific cog or all of them.
+        """
+        if cog is None:
+            reloaded_cogs = []
+            cogs = self.bot.cogs.copy().keys()
+            for c in cogs:
+                if await self.reload_cog(c):
+                    reloaded_cogs.append(c)
+            res = "Reloaded Cogs:\n-" + "\n-".join(reloaded_cogs)
+        else:
+            cog = cog.lower()
+            if cog in map(lambda x: x.lower(), self.bot.cogs.keys()):
+                await self.reload_cog(cog)
+                res = f"Reloaded {cog}"
+            else:
+                res = "Invalid cog name! Valid cogs are:\n " + ", ".join(self.bot.cogs)
+        embed = discord.Embed(title="Reload", description=res)
+        embed.set_author(
+            name=ctx.author.name,
+            icon_url=ctx.author.avatar_url
+        )
+        embed.timestamp = datetime.datetime.utcnow()
+        await ctx.send(embed=embed)
+        
     @commands.command()
     async def say(self, ctx: Context, *words):
         """
@@ -18,9 +67,10 @@ class General(commands.Cog):
         """
         if len(words) == 0:
             return
-        await ctx.send("Saying "+" ".join(words) + f"\n at the request of {ctx.author.name}")
+        msg = await ctx.send("TBA")
+        await msg.edit(content="Saying «"+" ".join(words) + f"»\n at the request of {ctx.author.name}")
 
-    @commands.command(aliases=['d',])
+    @commands.command(aliases=['d', ])
     @commands.is_owner()
     async def delete(self, ctx: commands.Context):
         """
@@ -74,3 +124,6 @@ class General(commands.Cog):
 
 def setup(bot: commands.Bot):
     bot.add_cog(General(bot))
+
+
+
