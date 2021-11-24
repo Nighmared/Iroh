@@ -1,4 +1,5 @@
 import logging
+
 from discord.ext import commands
 from discord.ext.commands import Bot
 
@@ -13,7 +14,9 @@ bot.load_extension("cogs.general")
 
 @bot.event
 async def on_command(ctx: commands.Context):
-    logging.info(f"{ctx.channel.name}>{ctx.author.id} aka {ctx.author.name}: {ctx.command}")
+    logging.info(
+        f"{ctx.channel.name}>{ctx.author.id} aka {ctx.author.name}: {ctx.command}"
+    )
     await ctx.message.delete()
 
 

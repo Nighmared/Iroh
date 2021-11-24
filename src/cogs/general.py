@@ -1,15 +1,14 @@
 import datetime
+
 import discord
 from discord.ext import commands
 from discord.ext.commands import Context
-from discord_components import DiscordComponents, Button
+from discord_components import Button, DiscordComponents
 
 
 class General(commands.Cog):
 
-    EXTENSIONS = (
-        "cogs.quotes",
-    )
+    EXTENSIONS = ("cogs.quotes",)
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -26,13 +25,17 @@ class General(commands.Cog):
             except discord.ext.commands.errors.ExtensionAlreadyLoaded:
                 continue
 
-    async def reload_cog(self, cog:str):
+    async def reload_cog(self, cog: str):
         self.bot.reload_extension(f"cogs.{cog.lower()}")
         return True
         print(str(e))
         return False
 
-    @commands.command(aliases=['rl', ])
+    @commands.command(
+        aliases=[
+            "rl",
+        ]
+    )
     @commands.is_owner()
     async def reload(self, ctx: Context, cog: str = None):
         """
@@ -53,13 +56,10 @@ class General(commands.Cog):
             else:
                 res = "Invalid cog name! Valid cogs are:\n " + ", ".join(self.bot.cogs)
         embed = discord.Embed(title="Reload", description=res)
-        embed.set_author(
-            name=ctx.author.name,
-            icon_url=ctx.author.avatar_url
-        )
+        embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
         embed.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed=embed)
-        
+
     @commands.command()
     async def say(self, ctx: Context, *words):
         """
@@ -68,9 +68,17 @@ class General(commands.Cog):
         if len(words) == 0:
             return
         msg = await ctx.send("TBA")
-        await msg.edit(content="Saying «"+" ".join(words) + f"»\n at the request of {ctx.author.name}")
+        await msg.edit(
+            content="Saying «"
+            + " ".join(words)
+            + f"»\n at the request of {ctx.author.name}"
+        )
 
-    @commands.command(aliases=['d', ])
+    @commands.command(
+        aliases=[
+            "d",
+        ]
+    )
     @commands.is_owner()
     async def delete(self, ctx: commands.Context):
         """
@@ -93,8 +101,9 @@ class General(commands.Cog):
             description="very much WIP",
             url="https://github.com/Nighmared/Iroh",
         )
-        embed.set_image(url="https://repository-images.githubusercontent.com/393521076/b45b0860-a02b-4ba9-8d79-f588e9ea7b2b"
-)
+        embed.set_image(
+            url="https://repository-images.githubusercontent.com/393521076/b45b0860-a02b-4ba9-8d79-f588e9ea7b2b"
+        )
         embed.add_field(name="Author", value="<@!291291715598286848>")
         embed.add_field(name="Source", value="https://github.com/Nighmared/Iroh")
         embed.set_author(
@@ -117,13 +126,12 @@ class General(commands.Cog):
                 Button(label="DANG"),
             ],
         )
-        interaction = await self.bot.wait_for("button_click", check=lambda i:i.component.label.startswith("DANG"))
+        interaction = await self.bot.wait_for(
+            "button_click", check=lambda i: i.component.label.startswith("DANG")
+        )
         await msg.delete()
         await interaction.respond(content="HELO")
 
 
 def setup(bot: commands.Bot):
     bot.add_cog(General(bot))
-
-
-
